@@ -1,4 +1,7 @@
 package br.com.pathfinder.api.entity;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 public class Personagem {
 	public static final String TABLE = "PATHFINDER_PERSONAGEM";
@@ -7,20 +10,27 @@ public class Personagem {
 	public static final String COL_USUARIO = "USUARIO";
 	public static final String COL_CLASSE = "CLASSE";
 	public static final String COL_LVL = "LVL";
+	public static final String COL_MESA = "MESA";
 	public static final String COL_FORC = "FORC";
 	public static final String COL_DEST = "DEST";
 	public static final String COL_CONS = "CONS";
 	public static final String COL_INTE = "INTE";
 	public static final String COL_SABE = "SABE";
 	public static final String COL_CARI = "CARI";
-
+	public static final String COL_FORT = "FORT";
+	public static final String COL_REFL = "REFL";
+	public static final String COL_VONT = "VONT";
+	public static final String COL_HP = "HP";
+	public static final String COL_CA = "CA";
+	public static final String COL_BBA = "BBA";
 	
 	
 	private Long id;
 	private String nome;
 	private Long usuario;
-	private String classe;
+	private Classe classe;
 	private Long lvl;
+	private Long mesa;
 //atributos
 	private Long forc;
 	private Long dest;
@@ -49,10 +59,13 @@ public class Personagem {
 	public void setUsuario(Long usuario) {			this.usuario = usuario;		}
 	
 //classe	
-	public String getClasse() {					return classe;			}
-	public void setClasse(String classe) {		this.classe = classe;	}
+	public Classe getClasse() {					return classe;			}
+	public void setClasse(Classe classe) {		this.classe = classe;	}
 	
 //lvl
+	public Long getMesa() {						return mesa;				}
+	public void setMesa(Long mesa) {			this.mesa = mesa;			}
+//
 	public Long getLvl() {						return lvl;				}
 	public void setLvl(Long lvl) {				this.lvl = lvl;			}
 //Atributos
@@ -96,5 +109,26 @@ public class Personagem {
 
 	public Personagem(){}
 	
+	public Personagem(Long id, String nome, Long usuario, Classe classe, Long lvl, Long forc, Long dest, Long cons, Long inte, Long sabe, Long cari, Long mesa){
+		this.id	 		= id;
+		this.nome		= nome;
+		this.usuario	= usuario;
+		this.classe		= classe;
+		this.lvl 		= lvl;
+		this.forc			= forc;
+		this.dest			= dest;
+		this.cons			= cons;
+		this.inte			= inte;
+		this.sabe			= sabe;
+		this.cari			= cari;
+		this.mesa			= mesa;	
+	}
 	
+	
+	public static List<String> getColunas() {
+		return Lists.newArrayList(COL_ID , COL_NOME, COL_USUARIO, COL_CLASSE, COL_LVL,COL_MESA, COL_FORC, COL_DEST, COL_CONS, COL_INTE, COL_SABE, COL_CARI); 
+	}
+	public static String[] getColunasArray() {
+		return new String[] {COL_ID , COL_NOME, COL_USUARIO, COL_CLASSE, COL_LVL,COL_MESA, COL_FORC, COL_DEST, COL_CONS, COL_INTE, COL_SABE, COL_CARI};
+	}
 }
