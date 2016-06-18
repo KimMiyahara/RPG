@@ -11,41 +11,36 @@ import org.apache.commons.dbutils.DbUtils;
 
 import com.google.common.collect.Lists;
 
-import br.com.pathfinder.api.dao.UsuarioDAO;
-import br.com.pathfinder.api.entity.Usuario;
+import br.com.pathfinder.api.dao.MesaDAO;
+import br.com.pathfinder.api.entity.Mesa;
 import br.com.spektro.minispring.core.dbmapper.ConfigDBMapper;
 
-public class UsuarioDAOImpl implements UsuarioDAO {
+public class MesaDAOImpl implements MesaDAO {
 
 	@Override
-	public Long save(Usuario usuario) {
+	public Long save(Mesa mesa) {
+		
 		Connection con = null;
 		PreparedStatement insert = null;
 		try {
 			con = ConfigDBMapper.getDefaultConnection();
+			String colunas = DAOUtils.getColunas(getDefaultConnectionType(),Mesa.getColunas());
 
-			String colunas = DAOUtils.getColunas(getDefaultConnectionType(),
-					Usuario.getColunas());
+				String values = DAOUtils.completarClausulaValues(getDefaultConnectionType(),
+						Mesa.getColunas().size() - 1, "SEQ_PATHFINDER_MESA");
 
-			String values = DAOUtils.completarClausulaValues(getDefaultConnectionType(),
-					Usuario.getColunas().size() - 1, "SEQ_PATHFINDER_USUARIO");
+				String sql = "INSERT INTO " + Mesa.TABLE + colunas + " VALUES " + values;
+				insert = DAOUtils.criarStatment(sql, con, getDefaultConnectionType(),
+						Mesa.getColunasArray());
 
-			String sql = "INSERT INTO " + Usuario.TABLE + colunas + " VALUES " + values;
-
-			insert = DAOUtils.criarStatment(sql, con, getDefaultConnectionType(),
-					Usuario.getColunasArray());
-
-			insert.setString(1, usuario.getNome());
-			insert.setString(2, usuario.getLogin());
-			insert.setString(3, usuario.getSenha());
-			
-			insert.execute();
-
-			ResultSet generatedKeys = insert.getGeneratedKeys();
-			if (generatedKeys.next()) {
-				return generatedKeys.getLong(1);
-			}
-
+				insert.setString(1, mesa.getNome());
+				insert.setLong(2, mesa.getMestre());
+				
+				insert.execute();
+				ResultSet generatedKeys = insert.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					return generatedKeys.getLong(1);
+				}
 			return null;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -56,18 +51,16 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 
 	@Override
-	public void update(Usuario usuario) {
+	public void update(Mesa mesa) {
 		Connection conn = null;
 		PreparedStatement update = null;
 		try {
 			conn = ConfigDBMapper.getDefaultConnection();
-			update = conn.prepareStatement("UPDATE " + Usuario.TABLE + " SET "
-					+ Usuario.COL_NOME + " = ?, " + Usuario.COL_LOGIN + " = ?, " + Usuario.COL_SENHA + " = ? "
-					+ " WHERE " + Usuario.COL_ID + " = ?");
-			update.setString(1, usuario.getNome());
-			update.setString(2, usuario.getLogin());
-			update.setString(3, usuario.getSenha());
-			update.setLong(4, usuario.getId());
+			update = conn.prepareStatement("UPDATE " + Mesa.TABLE + " SET "
+					+ Mesa.COL_NOME + " = ?, "  +Mesa.COL_MESTRE + " = ?  WHERE " + Mesa.COL_ID + " = ?");
+			update.setString(1, mesa.getNome());
+			update.setLong(2, mesa.getMestre());
+			update.setLong(3, mesa.getId());
 			update.execute();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -83,7 +76,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		PreparedStatement delete = null;
 		try {
 			con = ConfigDBMapper.getDefaultConnection();
-			String sql = "DELETE FROM " + Usuario.TABLE + " WHERE ID = ?;";
+			String sql = "DELETE FROM " + Mesa.TABLE + " WHERE ID = ?;";
 			delete = con.prepareStatement(sql);
 			delete.setLong(1, id);
 			delete.execute();;
@@ -96,19 +89,19 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 
 	@Override
-	public Usuario findById(Long id) {
+	public Mesa findById(Long id) {
 		Connection con = null;
 		PreparedStatement find = null;
-		Usuario user = null;
+		Mesa user = null;
 		try {
 			con = ConfigDBMapper.getDefaultConnection();
-			String sql = "SELECT * FROM " + Usuario.TABLE + " WHERE " + Usuario.COL_ID
+			String sql = "SELECT * FROM " + Mesa.TABLE + " WHERE " + Mesa.COL_ID
 					+ " = ?;";
 			find = con.prepareStatement(sql);
 			find.setLong(1, id);
 			ResultSet rs = find.executeQuery();
 			if (rs.next()) {
-				user = this.buildUsuario(rs);
+				user = this.buildMesa(rs);
 			}
 			return user;
 		} catch (Exception e) {
@@ -120,14 +113,14 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 
 	@Override
-	public List<Usuario> findAll() {
+	public List<Mesa> findAll() {
 		Connection conn = null;
 		PreparedStatement findAll = null;
 		try {
 			conn = ConfigDBMapper.getDefaultConnection();
-			findAll = conn.prepareStatement("SELECT * FROM " + Usuario.TABLE);
+			findAll = conn.prepareStatement("SELECT * FROM " + Mesa.TABLE);
 			ResultSet rs = findAll.executeQuery();
-			return this.buildUsuarios(rs);
+			return this.buildMesas(rs);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -135,42 +128,35 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			DbUtils.closeQuietly(findAll);
 		}
 	}
-
-	private List<Usuario> buildUsuarios(ResultSet rs) throws SQLException {
-		List<Usuario> usuarios = Lists.newArrayList();
-		while (rs.next()) {
-			usuarios.add(this.buildUsuario(rs));
-		}
-		return usuarios;
+	private Mesa buildMesa(ResultSet rs) throws SQLException {
+		Mesa mesa= new Mesa();
+		mesa.setId(rs.getLong(Mesa.COL_ID));
+		mesa.setNome(rs.getString(Mesa.COL_NOME));
+		mesa.setMestre(rs.getLong(Mesa.COL_MESTRE));
+		return mesa;
 	}
-
-	private Usuario buildUsuario(ResultSet rs) throws SQLException {
-		Usuario usuario = new Usuario();
-		usuario.setId(rs.getLong(Usuario.COL_ID));
-		usuario.setNome(rs.getString(Usuario.COL_NOME));
-		usuario.setLogin(rs.getString(Usuario.COL_LOGIN));
-		usuario.setSenha(rs.getString(Usuario.COL_SENHA));
-		
-		return usuario;
+	private List<Mesa> buildMesas(ResultSet rs) throws SQLException {
+		List<Mesa> mesas = Lists.newArrayList();
+		while (rs.next()) {
+			mesas.add(this.buildMesa(rs));
+		}
+		return mesas;
 	}
 
 	@Override
-	public Usuario Login(String login, String senha) {
+	public List<Mesa> findByMestre(Long mest) {
+		
 		Connection con = null;
 		PreparedStatement find = null;
-		Usuario user = null;
 		try {
 			con = ConfigDBMapper.getDefaultConnection();
-			String sql = "SELECT * FROM " + Usuario.TABLE + " WHERE " + Usuario.COL_LOGIN
-					+ " = ? AND ;"+ Usuario.COL_SENHA + " = ?;";
+			String sql = "SELECT * FROM " + Mesa.TABLE + " WHERE " + Mesa.COL_MESTRE
+					+ " = ?;";
 			find = con.prepareStatement(sql);
-			find.setString(1, login);
-			find.setString(1, senha);
+			
+			find.setLong(1, mest);
 			ResultSet rs = find.executeQuery();
-			if (rs.next()) {
-				user = this.buildUsuario(rs);
-			}
-			return user;
+			return this.buildMesas(rs);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -178,5 +164,4 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			DbUtils.closeQuietly(find);
 		}
 	}
-
 }

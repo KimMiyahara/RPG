@@ -1,22 +1,19 @@
-package br.com.pathfinder.api.entity;
+package br.com.pathfinder.api.dto;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class Mesa {
-	public static final String TABLE = "PATHFINDER_MESA";
-	public static final String COL_ID = "ID";
-	public static final String COL_NOME = "NOME";
-	public static final String COL_MESTRE = "MESTRE";
-	
+public class MesaDTO {
 	private Long id;
 	private String nome;
 	private Long mestre;
 	
-	public Mesa (){}
+	private List<PersonagemDTO> personas = Lists.newArrayList();
+	
+	public MesaDTO (){}
 		
-	public Mesa ( Long id, String nome, Long mestre){
+	public MesaDTO ( Long id, String nome, Long mestre){
 		this.id 	= id;
 		this.nome 	= nome;
 		this.mestre = mestre;
@@ -30,18 +27,12 @@ public class Mesa {
 
 	public Long getMestre() {							return mestre;			}
 	public void setMestre(Long mestre) {				this.mestre = mestre;	}
-
-	public static List<String> getColunas() {
-		return Lists.newArrayList(COL_ID, COL_NOME, COL_MESTRE);
-	}
-
-	public static String[] getColunasArray() {
-		return new String[] { COL_ID, COL_NOME, COL_MESTRE};
-	}
+	
+	public void setPersonas(List<PersonagemDTO> personas) {		this.personas = personas;	}
+	public  List<PersonagemDTO> getPersonas() {					return personas;			}
 	
 	@Override
 	public String toString() {
-		return id+" ,"+nome+" ,"+ mestre;
+		return id+" ,"+nome+" ,"+ mestre+"\n "+personas;
 	}
-	
 }

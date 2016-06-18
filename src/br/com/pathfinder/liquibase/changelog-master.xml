@@ -17,20 +17,111 @@
 	</changeSet>
 
 	<changeSet id="002" author="kim">
-		<addPrimaryKey columnNames="ID" tableName="PATHFINDER_USUARIO" />
+			<addPrimaryKey columnNames="ID" tableName="PATHFINDER_USUARIO" />
 	</changeSet>
 
 	<changeSet author="kim" id="003" dbms="oracle, hsqldb, postgresql">      
    		<createSequence 
-            incrementBy="1"
-            sequenceName="SEQ_PATHFINDER_USUARIO"
-            startValue="1" />
+            incrementBy="1" sequenceName="SEQ_PATHFINDER_USUARIO" startValue="1" />
 	</changeSet>
 	
 	<changeSet author="kim" id="004" dbms="mysql">
     	<addAutoIncrement tableName="PATHFINDER_USUARIO" columnName="ID"
     		columnDataType="bigint" />
 	</changeSet>
+
+<changeSet id="005" author="kim">
+		<createTable tableName="PATHFINDER_MESA" >
+			<column name="ID" type="BIGINT" />
+			<column name="NOME" type="VARCHAR(255)" />
+			<column name="MESTRE" type="BIGINT" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="006" author="kim">
+			<addPrimaryKey columnNames="ID" tableName="PATHFINDER_MESA" />
+	</changeSet>
+
+	<changeSet author="kim" id="007" dbms="oracle, hsqldb, postgresql">      
+   		<createSequence 
+            incrementBy="1" sequenceName="SEQ_PATHFINDER_MESA" startValue="1" />
+	</changeSet>
+	
+	<changeSet author="kim" id="008" dbms="mysql">
+    	<addAutoIncrement tableName="PATHFINDER_MESA" columnName="ID"
+    		columnDataType="bigint" />
+	</changeSet>
+
+
+<changeSet id="009" author="kim">
+		<createTable tableName="PATHFINDER_CLASSE" >
+			<column name="ID" type="BIGINT" />
+			<column name="NOME" type="VARCHAR(255)" />
+			<column name="BBA" type="BIGINT" />
+			<column name="FORT" type="BIGINT" />
+			<column name="REFL" type="BIGINT" />
+			<column name="VONT" type="BIGINT" />
+			<column name="DADO_VIDA" type="BIGINT" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="010" author="kim">
+			<addPrimaryKey columnNames="ID" tableName="PATHFINDER_CLASSE" />
+	</changeSet>
+
+	<changeSet author="kim" id="011" dbms="oracle, hsqldb, postgresql">      
+   		<createSequence 
+            incrementBy="1" sequenceName="SEQ_PATHFINDER_CLASSE" startValue="1" />
+	</changeSet>
+	
+	<changeSet author="kim" id="012" dbms="mysql">
+    	<addAutoIncrement tableName="PATHFINDER_CLASSE" columnName="ID"
+    		columnDataType="bigint" />
+	</changeSet>
+
+
+
+<changeSet id="013" author="kim">
+		<createTable tableName="PATHFINDER_PERSONAGEM" >
+			<column name="ID" type="BIGINT" />
+			<column name="NOME" type="VARCHAR(255)" />
+			<column name="USUARIO" type="BIGINT" />
+			<column name="CLASSE" type="BIGINT" />
+			<column name="LVL" type="BIGINT" />
+			<column name="MESA" type="BIGINT" />
+			<column name="FORC" type="BIGINT" />
+			<column name="DEST" type="BIGINT" />
+			<column name="CONS" type="BIGINT" />
+			<column name="INTE" type="BIGINT" />
+			<column name="SABE" type="BIGINT" />
+			<column name="CARI" type="BIGINT" />
+			<column name="FORT" type="BIGINT" />
+			<column name="REFL" type="BIGINT" />
+			<column name="VONT" type="BIGINT" />
+			<column name="HP" type="BIGINT" />
+			<column name="CA" type="BIGINT" />
+			<column name="BBA" type="BIGINT" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="014" author="kim">
+			<addPrimaryKey columnNames="ID" tableName="PATHFINDER_PERSONAGEM" />
+	</changeSet>
+
+	<changeSet author="kim" id="015" dbms="oracle, hsqldb, postgresql">      
+   		<createSequence 
+            incrementBy="1" sequenceName="SEQ_PATHFINDER_PERSONAGEM" startValue="1" />
+	</changeSet>
+	
+	<changeSet author="kim" id="016" dbms="mysql">
+    	<addAutoIncrement tableName="PATHFINDER_PERSONAGEM" columnName="ID"
+    		columnDataType="bigint" />
+	</changeSet>
+
+
+
+
+
 
 
 

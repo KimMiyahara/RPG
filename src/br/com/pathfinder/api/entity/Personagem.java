@@ -1,4 +1,5 @@
 package br.com.pathfinder.api.entity;
+
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -27,25 +28,25 @@ public class Personagem {
 	
 	private Long id;
 	private String nome;
-	private Long usuario;
+	private Usuario usuario;
 	private Classe classe;
-	private Long lvl;
-	private Long mesa;
+	private Long lvl=1L;
+	private Mesa mesa;
 //atributos
-	private Long forc;
-	private Long dest;
-	private Long cons;
-	private Long inte;
-	private Long sabe;
-	private Long cari;
+	private Long forc=10L;
+	private Long dest=10L;
+	private Long cons=10L;
+	private Long inte=10L;
+	private Long sabe=10L;
+	private Long cari=10L;
 //resistencias
-	private Long fort;
-	private Long refl;
-	private Long vont;
+	private Long fort=0L;
+	private Long refl=0L;
+	private Long vont=0L;
 //bases
-	private Long hp;
-	private Long ca;
-	private Long bba;
+	private Long hp=0L;
+	private Long ca=0L;
+	private Long bba=0L;
 	
 //id	
 	public Long getId() {						return id;				}
@@ -55,16 +56,16 @@ public class Personagem {
 	public String getNome() {					return nome;			}
 	public void setNome(String nome) {			this.nome = nome;		}
 //usuario
-	public Long getUsuario() {				return usuario;			}
-	public void setUsuario(Long usuario) {			this.usuario = usuario;		}
+	public Usuario getUsuario() {				return usuario;			}
+	public void setUsuario(Usuario usuario) {			this.usuario = usuario;		}
 	
 //classe	
 	public Classe getClasse() {					return classe;			}
 	public void setClasse(Classe classe) {		this.classe = classe;	}
 	
 //lvl
-	public Long getMesa() {						return mesa;				}
-	public void setMesa(Long mesa) {			this.mesa = mesa;			}
+	public Mesa getMesa() {						return mesa;				}
+	public void setMesa(Mesa mesa) {			this.mesa = mesa;			}
 //
 	public Long getLvl() {						return lvl;				}
 	public void setLvl(Long lvl) {				this.lvl = lvl;			}
@@ -109,7 +110,7 @@ public class Personagem {
 
 	public Personagem(){}
 	
-	public Personagem(Long id, String nome, Long usuario, Classe classe, Long lvl, Long forc, Long dest, Long cons, Long inte, Long sabe, Long cari, Long mesa){
+	public Personagem(Long id, String nome, Usuario usuario, Classe classe, Long lvl, Long forc, Long dest, Long cons, Long inte, Long sabe, Long cari, Mesa mesa){
 		this.id	 		= id;
 		this.nome		= nome;
 		this.usuario	= usuario;
@@ -126,9 +127,16 @@ public class Personagem {
 	
 	
 	public static List<String> getColunas() {
-		return Lists.newArrayList(COL_ID , COL_NOME, COL_USUARIO, COL_CLASSE, COL_LVL,COL_MESA, COL_FORC, COL_DEST, COL_CONS, COL_INTE, COL_SABE, COL_CARI); 
+		return Lists.newArrayList(COL_ID , COL_NOME, COL_USUARIO, COL_CLASSE, COL_LVL,COL_MESA, COL_FORC, COL_DEST, COL_CONS, COL_INTE, COL_SABE, COL_CARI, COL_FORT, COL_REFL, COL_VONT, COL_HP,COL_CA,COL_BBA); 
 	}
 	public static String[] getColunasArray() {
-		return new String[] {COL_ID , COL_NOME, COL_USUARIO, COL_CLASSE, COL_LVL,COL_MESA, COL_FORC, COL_DEST, COL_CONS, COL_INTE, COL_SABE, COL_CARI};
+		return new String[] {COL_ID , COL_NOME, COL_USUARIO, COL_CLASSE, COL_LVL,COL_MESA, COL_FORC, COL_DEST, COL_CONS, COL_INTE, COL_SABE, COL_CARI, COL_FORT, COL_REFL, COL_VONT, COL_HP,COL_CA,COL_BBA};
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return id+"|"+nome+"|us:"+usuario.getNome()+"|cl:"+classe+" "+lvl+" fo"+forc+" de"+dest+" co"+cons+" in"+inte+" sa"+sabe+" ca"+cari+" mesa:"+mesa.getId();
+	}
+	
 }

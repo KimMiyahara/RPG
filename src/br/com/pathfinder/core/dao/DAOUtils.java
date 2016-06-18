@@ -10,10 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public class DAOUtils {
 
-	public static String completarClausulaValues(Class driverClass, int qtdParametros, String sequence) {
+	public static String completarClausulaValues(Class driverClass, int qtdParametros,
+			String sequence) {
 		String classname = driverClass.getName();
 		StringBuilder clausula = new StringBuilder();
-		
 		switch (classname) {
 			case "org.hsqldb.jdbcDriver":
 			case "org.postgresql.Driver":
@@ -23,6 +23,7 @@ public class DAOUtils {
 				clausula.append(sequence + ".nextVal,");
 				break;
 			case "com.mysql.jdbc.Driver":
+				// do nothing
 				break;
 		}
 
@@ -30,10 +31,10 @@ public class DAOUtils {
 
 		return "(" + clausula.toString() + ")";
 	}
+
 	public static String getColunas(Class dbClass, List<String> nomeColunas) {
 		String classname = dbClass.getName();
 		String colunas = null;
-
 		switch (classname) {
 			case "org.hsqldb.jdbcDriver":
 			case "org.postgresql.Driver":
@@ -48,9 +49,9 @@ public class DAOUtils {
 		return "(" + colunas + ")";
 	}
 
-	public static PreparedStatement criarStatment(String sql, Connection conn, Class dbClass, String[] colunas) throws SQLException {
+	public static PreparedStatement criarStatment(String sql, Connection conn,
+			Class dbClass, String[] colunas) throws SQLException {
 		String classname = dbClass.getName();
-		
 		switch (classname) {
 			case "org.postgresql.Driver":
 			case "com.mysql.jdbc.Driver":
@@ -66,7 +67,8 @@ public class DAOUtils {
 		return StringUtils.join(Collections.nCopies(length, "?"), ",");
 	}
 
-	public static void setValues(PreparedStatement preparedStatement, List<Long> valore) throws SQLException {
+	public static void setValues(PreparedStatement preparedStatement, List<Long> valore)
+			throws SQLException {
 		for (int i = 0; i < valore.size(); i++) {
 			preparedStatement.setObject(i + 1, valore.get(i));
 		}

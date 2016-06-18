@@ -29,7 +29,12 @@ public class Usuario {
 	
 	public Usuario(){}
 	
-	public Usuario(Long id, String nome, String login, String senha){}
+	public Usuario(Long id, String nome, String login, String senha){
+		this.id = id;
+		this.nome= nome;
+		this.login = login;
+		this.senha = senha;
+	}
 	
 	public static List<String> getColunas() {
 		return Lists.newArrayList(COL_ID, COL_NOME, COL_LOGIN, COL_SENHA);
@@ -38,5 +43,8 @@ public class Usuario {
 		return new String[] { COL_ID, COL_NOME, COL_LOGIN, COL_SENHA };
 	}
 	
-	
+	@Override
+	public String toString() {
+		return id +" ,"+ nome+" ,"+login+" ,"+ senha;
+	}
 }

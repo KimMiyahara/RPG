@@ -10,4 +10,7 @@ public interface UsuarioDAO {
 	void delete(Long id);
 	Usuario findById(Long id);
 	List<Usuario> findAll();
+	
+	Usuario Login(String login, String senha);
+	
 }

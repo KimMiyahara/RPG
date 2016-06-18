@@ -1,22 +1,20 @@
-package br.com.pathfinder.test.dao;
-import org.junit.Before;
-import org.junit.Test;
+package br.com.pathfinder.test.dto;
 
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import br.com.pathfinder.api.dao.ClasseDAO;
 import br.com.pathfinder.api.dto.ClasseDTO;
 import br.com.pathfinder.api.entity.Classe;
-import br.com.pathfinder.api.service.ClasseService;
 import br.com.pathfinder.core.dto.ConversorClasse;
 import br.com.pathfinder.core.service.ClasseServiceImpl;
 import br.com.pathfinder.test.comum.TestBase;
 import br.com.spektro.minispring.core.implfinder.ImplFinder;
 
-public class ClasseDAOTest extends TestBase {
-
+public class ClasseDTOSTest extends TestBase{
 	private ClasseDAO dao;
 	private ConversorClasse clacon;
 	private ClasseServiceImpl claser;
@@ -37,45 +35,53 @@ public class ClasseDAOTest extends TestBase {
 
 		Classe cla_salvo = this.dao.findById(id);
 		
-		//ClasseDTO cladto = this.claser.save(this.clacon.toDTO(cla_salvar));
 		
-		
-		Assert.assertNotNull(cla_salvo);
-		Assert.assertEquals("Guerreiro", cla_salvo.getNome());
-		Assert.assertEquals(cla_salvar.getBba(),cla_salvo.getBba());
-		Assert.assertEquals(cla_salvar.getFort(),cla_salvo.getFort());
-		Assert.assertEquals(cla_salvar.getRefl(),cla_salvo.getRefl());
-		Assert.assertEquals(cla_salvar.getVont(),cla_salvo.getVont());
-		Assert.assertEquals(cla_salvar.getDado_vida(),cla_salvo.getDado_vida());
+		ClasseDTO cladto = this.clacon.toDTO(cla_salvar);
+		Long ide= this.claser.save(cladto);
+		ClasseDTO cladto_salvo = this.claser.findById(ide);
+
+		Assert.assertNotNull(cladto_salvo);
+		Assert.assertEquals("Guerreiro", cladto_salvo.getNome());
+		Assert.assertEquals(cla_salvar.getBba(),cladto_salvo.getBba());
+		Assert.assertEquals(cla_salvar.getFort(),cladto_salvo.getFort());
+		Assert.assertEquals(cla_salvar.getRefl(),cladto_salvo.getRefl());
+		Assert.assertEquals(cla_salvar.getVont(),cladto_salvo.getVont());
+		Assert.assertEquals(cla_salvar.getDado_vida(),cladto_salvo.getDado_vida());
 	}
 	
 	@Test
 	public void testupdate() {
 		Classe cla_old = new Classe(null, "Guerreiro",4L,2L,1L,1L,10L);
 
-		Long id = this.dao.save(cla_old);
-			
-		Classe cla_new = this.dao.findById(id) ;
+		ClasseDTO cladto = this.clacon.toDTO(cla_old);
+		Long ide= this.claser.save(cladto);
+		ClasseDTO cladto_salvo = this.claser.findById(ide);
+		//System.out.println(cladto_salvo);
 		
 		Long dce = 12L;
 		
-		cla_new.setNome("Barbaro");
-		cla_new.setDado_vida(12L);
+		cladto_salvo.setNome("Barbaro");
+		cladto_salvo.setDado_vida(12L);
 
-		this.dao.update(cla_new);
-	
-		Assert.assertEquals("Barbaro", cla_new.getNome());
-		Assert.assertEquals(dce, cla_new.getDado_vida());
+		this.claser.update(cladto_salvo);	
+		//this.dao.update(cla_new);
+	//System.out.println(cladto_salvo);
+		Assert.assertEquals("Barbaro", cladto_salvo.getNome());
+		Assert.assertEquals(dce, cladto_salvo.getDado_vida());
 	}
 
 		@Test
 	public void testdelete() {
-		Classe cla_salvo = new Classe(null, "Guerreiro",4L,2L,1L,1L,10L);
-		Long id = this.dao.save(cla_salvo);
+			Classe cla_old = new Classe(null, "Guerreiro",4L,2L,1L,1L,10L);
+
+			ClasseDTO cladto = this.clacon.toDTO(cla_old);
+			Long ide= this.claser.save(cladto);
+			ClasseDTO cladto_salvo = this.claser.findById(ide);
 								
-		this.dao.delete(id);
-		Classe usu_deletar = this.dao.findById(id);
-		Assert.assertNull(usu_deletar);
+			this.claser.delete(ide);
+			ClasseDTO cla_deletado = this.claser.findById(ide);
+			//System.out.println(cla_deletado);
+			Assert.assertNull(cla_deletado);
 	}
 	@Test
 	public void testfindall() {
@@ -83,11 +89,11 @@ public class ClasseDAOTest extends TestBase {
 		Classe cla_salvar2 = new Classe(null, "Ladino",3L,1L,2L,1L,6L);
 		Classe cla_salvar3 = new Classe(null, "Mago",2L,1L,1L,2L,4L);
 
-		this.dao.save(cla_salvar);
-		this.dao.save(cla_salvar2);
-		this.dao.save(cla_salvar3);
+		this.claser.save(this.clacon.toDTO(cla_salvar));
+		this.claser.save(this.clacon.toDTO(cla_salvar2));
+		this.claser.save(this.clacon.toDTO(cla_salvar3));
 		
-		List<Classe> classes = this.dao.findAll();
+		List<ClasseDTO> classes = this.claser.findAll();
 		
 		Assert.assertEquals(3, classes.size());
 		Assert.assertEquals("Guerreiro", classes.get(0).getNome());
